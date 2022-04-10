@@ -1,0 +1,16 @@
+[Unit]
+Description=ytdlwatch
+After=network.target
+
+[Service]
+User=ubuntu
+Group=data
+Type=simple
+ExecStart=/usr/local/bin/ytdlwatch
+Restart=always
+StandardOutput=append:/var/log/ytdlwatch.log
+StandardError=append:/var/log/ytdlwatch.log
+EnvironmentFile=-/path/to/.env
+
+[Install]
+WantedBy=default.target
