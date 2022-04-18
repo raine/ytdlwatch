@@ -15,7 +15,7 @@ type YoutubePlaylistPoller struct {
 	youtubePlaylistId string
 	videoUrls         chan string
 	ticker            *time.Ticker
-	prevCheckIdMap    *map[string]struct{}
+	prevCheckIdMap    map[string]struct{}
 }
 
 func getPlaylistItemVideoUrl(item *youtube.PlaylistItem) string {
@@ -25,7 +25,7 @@ func getPlaylistItemVideoUrl(item *youtube.PlaylistItem) string {
 	)
 }
 
-func (p *YoutubePlaylistPoller) getPlaylistItemList() (*youtube.PlaylistItemListResponse, error) {
+func (p *YoutubePlaylistPoller) getPlaylistItemList(maxResults int64) (*youtube.PlaylistItemListResponse, error) {
 	log.Debug().Msg("getting playlist items")
 
 	ctx := context.Background()
@@ -36,41 +36,40 @@ func (p *YoutubePlaylistPoller) getPlaylistItemList() (*youtube.PlaylistItemList
 
 	return youtube.PlaylistItems.
 		List([]string{"snippet"}).
-		MaxResults(25).
+		MaxResults(maxResults).
 		PlaylistId(p.youtubePlaylistId).
 		Do()
 }
 
-func (p *YoutubePlaylistPoller) getNewPlaylistItems() ([]*youtube.PlaylistItem, error) {
-	list, err := p.getPlaylistItemList()
+func (p *YoutubePlaylistPoller) getNewPlaylistItems(maxResults int64) ([]*youtube.PlaylistItem, error) {
+	list, err := p.getPlaylistItemList(maxResults)
 	if err != nil {
 		return nil, err
 	}
 
-	idMap := make(map[string]struct{}, 0)
 	newItems := make([]*youtube.PlaylistItem, 0)
 
 	for _, item := range list.Items {
-		idMap[item.Id] = struct{}{}
-
-		if p.prevCheckIdMap != nil {
-			if _, ok := (*p.prevCheckIdMap)[item.Id]; !ok {
-				newItems = append(newItems, item)
-			}
+		if _, ok := p.prevCheckIdMap[item.Id]; !ok {
+			newItems = append(newItems, item)
 		}
+
+		// Collect all previously seen ids for now, not just ones from last query,
+		// which has the problem that deleting videos from the playlist might make
+		// old videos get returned
+		p.prevCheckIdMap[item.Id] = struct{}{}
 	}
 
-	p.prevCheckIdMap = &idMap
 	return newItems, nil
 }
 
-func (p *YoutubePlaylistPoller) start() {
+func (p *YoutubePlaylistPoller) Start() {
 	log.Info().Msg("starting to poll a youtube playlist")
-	p.getNewPlaylistItems()
+	p.getNewPlaylistItems(50)
 	p.ticker = time.NewTicker(time.Second * 10)
 
 	for range p.ticker.C {
-		items, err := p.getNewPlaylistItems()
+		items, err := p.getNewPlaylistItems(25)
 		if err != nil {
 			log.Error().Err(err).Msg("failed to get new playlist items")
 			continue
@@ -95,6 +94,7 @@ func NewYoutubePlaylistPoller(
 		youtubeApiKey:     youtubeApiKey,
 		youtubePlaylistId: youtubePlaylistId,
 		videoUrls:         videoUrls,
+		prevCheckIdMap:    make(map[string]struct{}),
 	}
 
 	return &poller

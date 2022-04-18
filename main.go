@@ -45,7 +45,7 @@ func main() {
 
 		if config.youtubeApiKey != "" {
 			poller := NewYoutubePlaylistPoller(config.youtubeApiKey, config.youtubePlaylistId, videoUrls)
-			poller.start()
+			poller.Start()
 		} else {
 			log.Fatal().Msg("expected YOUTUBE_API_KEY environment variable to be set with YOUTUBE_PLAYLIST_ID")
 		}
