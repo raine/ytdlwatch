@@ -15,7 +15,7 @@ go install github.com/raine/ytdlwatch
 
 To build for another platform, clone the repository and run go build like so:
 
-```
+```sh
 env GOOS=target-OS GOARCH=target-architecture go build .
 ```
 
@@ -30,6 +30,9 @@ env GOOS=target-OS GOARCH=target-architecture go build .
    ([screenshot](https://user-images.githubusercontent.com/11027/162623093-046a8400-8438-4261-b2c5-e4517dc28be7.png)).
    Needed so that the program only ever has to read the first page of playlist's
    items, and API quota does not have to be used for deleting videos.
+
+   Could the personal "Watch later" playlist be used? Unfortunately not, since
+   it's not available through the official API.
 
 3. Run `ytdlwatch` with the environment variables listed below set up.
 
