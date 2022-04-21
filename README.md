@@ -10,7 +10,7 @@ The Go Toolchain is required.
 The following will install `ytdlwatch` to `$GOPATH/bin`:
 
 ```sh
-go install github.com/raine/ytdlwatch
+go install github.com/raine/ytdlwatch@latest
 ```
 
 To build for another platform, clone the repository and run go build like so:
