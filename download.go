@@ -23,17 +23,28 @@ func download(
 	)
 	log.Info().Msgf("running %+v", cmd)
 
-	r, err := cmd.StdoutPipe()
+	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		log.Fatal().Err(err).Send()
 	}
 
-	cmd.Stderr = cmd.Stdout
-	scanner := bufio.NewScanner(r)
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
+		log.Fatal().Err(err).Send()
+	}
+
+	stdoutScanner := bufio.NewScanner(stdout)
+	stderrScanner := bufio.NewScanner(stderr)
 
 	go func() {
-		for scanner.Scan() {
-			log.Debug().Msgf("yt-dlp: %s", scanner.Text())
+		for stdoutScanner.Scan() {
+			log.Debug().Msgf("yt-dlp: %s", stdoutScanner.Text())
+		}
+	}()
+
+	go func() {
+		for stderrScanner.Scan() {
+			log.Error().Msgf("yt-dlp: %s", stderrScanner.Text())
 		}
 	}()
 
