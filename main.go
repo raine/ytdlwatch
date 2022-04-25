@@ -6,6 +6,7 @@ import (
 
 	"github.com/raine/ytdlwatch/config"
 	"github.com/raine/ytdlwatch/plex"
+	"github.com/raine/ytdlwatch/youtube"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/rs/zerolog/pkgerrors"
@@ -50,7 +51,7 @@ func main() {
 		log.Info().Str("youtubePlaylistId", config.YoutubePlaylistId).Msg("youtube playlist configured")
 
 		if config.YoutubeApiKey != "" {
-			poller := NewYoutubePlaylistPoller(config.YoutubeApiKey, config.YoutubePlaylistId, videoUrls)
+			poller := youtube.NewYoutubePlaylistPoller(config.YoutubeApiKey, config.YoutubePlaylistId, videoUrls)
 			go poller.Start()
 		} else {
 			log.Fatal().Msg("expected YOUTUBE_API_KEY environment variable to be set with YOUTUBE_PLAYLIST_ID")
