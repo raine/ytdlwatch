@@ -24,7 +24,10 @@ env GOOS=target-OS GOARCH=target-architecture go build .
 1. Create a project and an API key for accessing the Youtube API:
    https://console.cloud.google.com/apis/credentials
 
-2. Create a new playlist on Youtube. The playlist can be public or unlisted, but
+2. Enable access to YouTube API at
+   https://console.developers.google.com/apis/api/youtube.googleapis.com/overview
+
+3. Create a new playlist on Youtube. The playlist can be public or unlisted, but
    not private. In Playlist Settings, enable the setting "Add new videos to top
    of playlist"
    ([screenshot](https://user-images.githubusercontent.com/11027/162623093-046a8400-8438-4261-b2c5-e4517dc28be7.png)).
@@ -34,7 +37,7 @@ env GOOS=target-OS GOARCH=target-architecture go build .
    Could the personal "Watch later" playlist be used? Unfortunately not, since
    it's not available through the official API.
 
-3. Run `ytdlwatch` with the environment variables listed below set up.
+4. Run `ytdlwatch` with the environment variables listed below set up.
 
 See also the example systemd service:
 [ytdlwatch.service.example][example-systemd-service]
