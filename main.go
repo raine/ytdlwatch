@@ -4,6 +4,8 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/raine/ytdlwatch/config"
+	"github.com/raine/ytdlwatch/plex"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/rs/zerolog/pkgerrors"
@@ -11,13 +13,17 @@ import (
 
 var sem = make(chan int, 1)
 
-func process(config Config, videoUrls chan string) {
+func process(config config.Config, videoUrls chan string) {
 	for url := range videoUrls {
 		url := url
 		log.Info().Str("url", url).Msg("got a video url")
 		sem <- 1
 		go func() {
-			download(config, url)
+			download(
+				config.YoutubedlPath,
+				config.OutputPath,
+				url,
+			)
 			<-sem
 		}()
 	}
@@ -30,9 +36,9 @@ func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
 	videoUrls := make(chan string)
-	config := getConfig()
+	config := config.GetConfig()
 
-	logLevel, err := zerolog.ParseLevel(config.logLevel)
+	logLevel, err := zerolog.ParseLevel(config.LogLevel)
 	if err != nil {
 		log.Fatal().Err(err).Send()
 	}
@@ -40,17 +46,36 @@ func main() {
 
 	go process(config, videoUrls)
 
-	if config.youtubePlaylistId != "" {
-		log.Info().Str("youtubePlaylistId", config.youtubePlaylistId).Msg("youtube playlist configured")
+	if config.YoutubePlaylistId != "" {
+		log.Info().Str("youtubePlaylistId", config.YoutubePlaylistId).Msg("youtube playlist configured")
 
-		if config.youtubeApiKey != "" {
-			poller := NewYoutubePlaylistPoller(config.youtubeApiKey, config.youtubePlaylistId, videoUrls)
-			poller.Start()
+		if config.YoutubeApiKey != "" {
+			poller := NewYoutubePlaylistPoller(config.YoutubeApiKey, config.YoutubePlaylistId, videoUrls)
+			go poller.Start()
 		} else {
 			log.Fatal().Msg("expected YOUTUBE_API_KEY environment variable to be set with YOUTUBE_PLAYLIST_ID")
 		}
 	} else {
 		log.Fatal().Msg("youtube playlist not configured")
+	}
+
+	if config.PlexApiToken != "" &&
+		config.PlexApiUrl != "" &&
+		config.PlexLibraryKey != "" {
+		log.Info().
+			Str("plexApiUrl", config.PlexApiUrl).
+			Str("plexLibraryKey", config.PlexLibraryKey).
+			Msg("plex configured, will delete watched videos")
+
+		plexVideoDeleter := plex.NewPlexWatchedVidDeleter(
+			config.PlexApiUrl,
+			config.PlexApiToken,
+			config.PlexLibraryKey,
+			config.OutputPath,
+		)
+		plexVideoDeleter.Start()
+	} else {
+		log.Info().Msg("plex not configured")
 	}
 
 	runtime.Goexit()

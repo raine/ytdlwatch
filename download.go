@@ -8,17 +8,18 @@ import (
 )
 
 func download(
-	config Config,
+	youtubedlPath string,
+	outputPath string,
 	videoUrl string,
 ) {
 	cmd := exec.Command(
-		config.youtubedlPath,
+		youtubedlPath,
 		"--newline",
 		"--output", "%(title)s.%(ext)s",
 		"--embed-metadata",
 		"--embed-subs",
 		"--sub-lang", "en",
-		"--paths", config.outputPath,
+		"--paths", outputPath,
 		videoUrl,
 	)
 	log.Info().Msgf("running %+v", cmd)

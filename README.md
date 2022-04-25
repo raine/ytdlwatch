@@ -42,8 +42,18 @@ env GOOS=target-OS GOARCH=target-architecture go build .
 See also the example systemd service:
 [ytdlwatch.service.example][example-systemd-service]
 
+## optional plex integration
+
+One use case for ytdlwatch is to download videos into a Plex library. That part
+is doable by just creating a new library in Plex, and adding the directory at
+`OUTPUT_PATH` as media source. What maybe remains is a need for mechanism to delete
+watched videos. You can make ytdlwatch to delete watched videos periodically by
+configuring the Plex related environment variables below.
+
 ## env vars
 
+- `LOG_LEVEL`: Log level of the program. Defaults to `info`. Set to `debug` to
+  see all output from whatever program is used to download videos.
 - `YOUTUBE_API_KEY`: Youtube API key. Needed for accessing the given Youtube
   playlist. Create one here (and a new project, if necessary):
   https://console.cloud.google.com/apis/credentials **required**
@@ -55,8 +65,15 @@ See also the example systemd service:
 - `YOUTUBE_DL_PATH`: Path to executable that is used to download videos from
   Youtube. Defaults to [`yt-dlp`][yt-dlp], which is a fork of
   [`youtube-dl`][youtube-dl].
-- `LOG_LEVEL`: Log level of the program. Defaults to `info`. Set to `debug` to
-  see all output from whatever program is used to download videos.
+- `PLEX_API_TOKEN`: Plex API Token. This official support article has details on
+  how to obtain it: [Finding an authentication token / X-Plex-Token
+  ][plex-api-token]
+- `PLEX_API_URL`: URL to Plex server. This might be something like
+  `http://localhost:32400`.
+- `PLEX_LIBRARY_KEY`: Key to the Plex library where YouTube videos are added to.
+  The program will delete watched videos from this library. You can find the key
+  by opening a library with browser in Plex UI and checking page URL for a query
+  parameter like `source=7`.
 
 ## development
 
@@ -69,3 +86,5 @@ See `just -l` for recipes.
 [youtube-dl]: https://github.com/ytdl-org/youtube-dl
 [example-systemd-service]:
   https://github.com/raine/ytdlwatch/blob/master/ytdlwatch.service.example
+[plex-api-token]:
+  https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/

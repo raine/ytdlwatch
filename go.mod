@@ -3,6 +3,7 @@ module github.com/raine/ytdlwatch
 go 1.18
 
 require (
+	github.com/raine/go-plex-client v0.0.0-20220424134546-74eac2bc68bf
 	github.com/rs/zerolog v1.26.1
 	google.golang.org/api v0.74.0
 )
@@ -11,7 +12,9 @@ require (
 	cloud.google.com/go/compute v1.5.0 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/google/uuid v1.3.0 // indirect
 	github.com/googleapis/gax-go/v2 v2.2.0 // indirect
+	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	go.opencensus.io v0.23.0 // indirect
 	golang.org/x/net v0.0.0-20220325170049-de3da57026de // indirect
