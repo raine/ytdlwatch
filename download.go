@@ -9,18 +9,14 @@ import (
 
 func download(
 	youtubedlPath string,
-	outputPath string,
+	youtubedlArgs []string,
 	videoUrl string,
 ) {
+	args := append(youtubedlArgs, videoUrl)
+
 	cmd := exec.Command(
 		youtubedlPath,
-		"--newline",
-		"--output", "%(title)s.%(ext)s",
-		"--embed-metadata",
-		"--embed-subs",
-		"--sub-lang", "en",
-		"--paths", outputPath,
-		videoUrl,
+		args...,
 	)
 	log.Info().Msgf("running %+v", cmd)
 

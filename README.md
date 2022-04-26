@@ -46,9 +46,9 @@ See also the example systemd service:
 
 One use case for ytdlwatch is to download videos into a Plex library. That part
 is doable by just creating a new library in Plex, and adding the directory at
-`OUTPUT_PATH` as media source. What maybe remains is a need for mechanism to delete
-watched videos. You can make ytdlwatch to delete watched videos periodically by
-configuring the Plex related environment variables below.
+`OUTPUT_PATH` as media source. What maybe remains is a need for mechanism to
+delete watched videos. You can make ytdlwatch to delete watched videos
+periodically by configuring the Plex related environment variables below.
 
 ## env vars
 
@@ -65,6 +65,10 @@ configuring the Plex related environment variables below.
 - `YOUTUBE_DL_PATH`: Path to executable that is used to download videos from
   Youtube. Defaults to [`yt-dlp`][yt-dlp], which is a fork of
   [`youtube-dl`][youtube-dl].
+- `YOUTUBE_DL_ARGS`: Parameters passed to the executable configured above. This
+  can be used to override the default parameters used by ytdlwatch. If set,
+  `OUTPUT_PATH` has no effect, and `--paths <output path>` has to be manually
+  included in the args, if desired.
 - `PLEX_API_TOKEN`: Plex API Token. This official support article has details on
   how to obtain it: [Finding an authentication token / X-Plex-Token
   ][plex-api-token]

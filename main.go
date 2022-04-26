@@ -22,7 +22,7 @@ func process(config config.Config, videoUrls chan string) {
 		go func() {
 			download(
 				config.YoutubedlPath,
-				config.OutputPath,
+				config.YoutubedlArgs,
 				url,
 			)
 			<-sem
