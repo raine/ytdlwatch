@@ -7,18 +7,21 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-type Config struct {
-	LogLevel      string
-	OutputPath    string
-	YoutubedlPath string
-	YoutubedlArgs []string
+const (
+	defaultLogLevel         = "info"
+	defaultYoutubedlBinPath = "yt-dlp"
+)
 
+type Config struct {
+	LogLevel          string
+	OutputPath        string
+	YoutubedlPath     string
+	YoutubedlArgs     []string
 	YoutubeApiKey     string
 	YoutubePlaylistId string
-
-	PlexApiToken   string
-	PlexApiUrl     string
-	PlexLibraryKey string
+	PlexApiToken      string
+	PlexApiUrl        string
+	PlexLibraryKey    string
 }
 
 func GetConfig() Config {
@@ -39,7 +42,7 @@ func GetConfig() Config {
 	}
 
 	if youtubedlBinPath == "" {
-		youtubedlBinPath = "yt-dlp"
+		youtubedlBinPath = defaultYoutubedlBinPath
 		log.Info().Msgf("YOUTUBE_DL_PATH is unset, defaulting to %s", youtubedlBinPath)
 	}
 
@@ -62,7 +65,7 @@ func GetConfig() Config {
 	}
 
 	if logLevel == "" {
-		logLevel = "info"
+		logLevel = defaultLogLevel
 	}
 
 	return Config{

@@ -1,15 +1,13 @@
 package main
 
 import (
-	"os"
+	"net/http"
 	"runtime"
 
 	"github.com/raine/ytdlwatch/config"
 	"github.com/raine/ytdlwatch/plex"
 	"github.com/raine/ytdlwatch/youtube"
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/rs/zerolog/pkgerrors"
 )
 
 var sem = make(chan int, 1)
@@ -32,18 +30,10 @@ func processVideoUrls(config config.Config, videoUrls chan string) {
 
 func main() {
 	handleGracefulExit()
-	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-	zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
-
+	initLogging()
 	videoUrls := make(chan string)
 	config := config.GetConfig()
-
-	logLevel, err := zerolog.ParseLevel(config.LogLevel)
-	if err != nil {
-		log.Fatal().Err(err).Send()
-	}
-	zerolog.SetGlobalLevel(logLevel)
+	setLogLevel(config.LogLevel)
 
 	go processVideoUrls(config, videoUrls)
 
