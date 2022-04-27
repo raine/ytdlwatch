@@ -14,7 +14,7 @@ import (
 
 var sem = make(chan int, 1)
 
-func process(config config.Config, videoUrls chan string) {
+func processVideoUrls(config config.Config, videoUrls chan string) {
 	for url := range videoUrls {
 		url := url
 		log.Info().Str("url", url).Msg("got a video url")
@@ -45,7 +45,7 @@ func main() {
 	}
 	zerolog.SetGlobalLevel(logLevel)
 
-	go process(config, videoUrls)
+	go processVideoUrls(config, videoUrls)
 
 	if config.YoutubePlaylistId != "" {
 		log.Info().Str("youtubePlaylistId", config.YoutubePlaylistId).Msg("youtube playlist configured")
