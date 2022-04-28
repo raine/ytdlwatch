@@ -52,8 +52,7 @@ periodically by configuring the Plex related environment variables below.
 
 ## env vars
 
-- `LOG_LEVEL`: Log level of the program. Defaults to `info`. Set to `debug` to
-  see all output from whatever program is used to download videos.
+- `LOG_LEVEL`: Log level of the program. Defaults to `info`.
 - `YOUTUBE_API_KEY`: Youtube API key. Needed for accessing the given Youtube
   playlist. Create one here (and a new project, if necessary):
   https://console.cloud.google.com/apis/credentials **required**

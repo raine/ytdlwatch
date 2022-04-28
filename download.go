@@ -35,13 +35,13 @@ func download(
 
 	go func() {
 		for stdoutScanner.Scan() {
-			log.Debug().Msgf("yt-dlp: %s", stdoutScanner.Text())
+			log.Info().Msgf("yt-dlp: %s", stdoutScanner.Text())
 		}
 	}()
 
 	go func() {
 		for stderrScanner.Scan() {
-			log.Error().Msgf("yt-dlp: %s", stderrScanner.Text())
+			log.Info().Msgf("yt-dlp: %s", stderrScanner.Text())
 		}
 	}()
 
