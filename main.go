@@ -36,6 +36,7 @@ func main() {
 
 	go processVideoUrls(config, videoUrls)
 
+	// Youtube
 	if config.YoutubePlaylistId != "" {
 		log.Info().Str("youtubePlaylistId", config.YoutubePlaylistId).Msg("youtube playlist configured")
 
@@ -49,6 +50,7 @@ func main() {
 		log.Info().Msg("youtube playlist not configured")
 	}
 
+	// Plex
 	if config.PlexApiToken != "" &&
 		config.PlexApiUrl != "" &&
 		config.PlexLibraryKey != "" {
@@ -68,6 +70,7 @@ func main() {
 		log.Info().Msg("plex not configured")
 	}
 
+	// Listen for urls over HTTP
 	if config.Port != 0 {
 		listenHttp(config.Port, videoUrls)
 	} else {
