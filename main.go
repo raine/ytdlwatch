@@ -1,7 +1,6 @@
 package main
 
 import (
-	"net/http"
 	"runtime"
 
 	"github.com/raine/ytdlwatch/config"
@@ -67,6 +66,12 @@ func main() {
 		plexVideoDeleter.Start()
 	} else {
 		log.Info().Msg("plex not configured")
+	}
+
+	if config.Port != 0 {
+		listenHttp(config.Port, videoUrls)
+	} else {
+		log.Info().Msg("port not configured, will not listen over http")
 	}
 
 	runtime.Goexit()

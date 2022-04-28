@@ -19,7 +19,12 @@ To build for another platform, clone the repository and run go build like so:
 env GOOS=target-OS GOARCH=target-architecture go build .
 ```
 
-## how to use
+## youtube playlist watching
+
+One method of triggering `ytdlwatch` to download videos is by watching a
+playlist for new videos on YouTube.
+
+### setup
 
 1. Create a project and an API key for accessing the Youtube API:
    https://console.cloud.google.com/apis/credentials
@@ -42,7 +47,21 @@ env GOOS=target-OS GOARCH=target-architecture go build .
 See also the example systemd service:
 [ytdlwatch.service.example][example-systemd-service]
 
-## optional plex integration
+## http api
+
+The program can be made to listen for HTTP requests that include video URL to be
+downloaded.
+
+1. Define the `PORT` environment variable
+2. Send a POST request to path `/download` with video URL as the body.
+
+### curl example
+
+```sh
+curl -X POST http://localhost:8080/download -d'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+```
+
+## plex integration (optional)
 
 One use case for ytdlwatch is to download videos into a Plex library. That part
 is doable by just creating a new library in Plex, and adding the directory at
@@ -53,6 +72,7 @@ periodically by configuring the Plex related environment variables below.
 ## env vars
 
 - `LOG_LEVEL`: Log level of the program. Defaults to `info`.
+- `PORT`: The port http server will bind to.
 - `YOUTUBE_API_KEY`: Youtube API key. Needed for accessing the given Youtube
   playlist. Create one here (and a new project, if necessary):
   https://console.cloud.google.com/apis/credentials **required**

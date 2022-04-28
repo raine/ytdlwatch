@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"strconv"
 
 	"github.com/mattn/go-shellwords"
 	"github.com/rs/zerolog/log"
@@ -14,6 +15,7 @@ const (
 
 type Config struct {
 	LogLevel          string
+	Port              int
 	OutputPath        string
 	YoutubedlPath     string
 	YoutubedlArgs     []string
@@ -26,6 +28,7 @@ type Config struct {
 
 func GetConfig() Config {
 	logLevel, _ := os.LookupEnv("LOG_LEVEL")
+	portRaw, _ := os.LookupEnv("PORT")
 	outputPath, _ := os.LookupEnv("OUTPUT_PATH")
 	youtubedlBinPath, _ := os.LookupEnv("YOUTUBE_DL_PATH")
 	youtubedlArgsRaw, _ := os.LookupEnv("YOUTUBE_DL_ARGS")
@@ -69,8 +72,18 @@ func GetConfig() Config {
 		logLevel = defaultLogLevel
 	}
 
+	var port int
+	if portRaw != "" {
+		i, err := strconv.Atoi(portRaw)
+		if err != nil {
+			log.Fatal().Err(err).Send()
+		}
+		port = i
+	}
+
 	return Config{
 		LogLevel:      logLevel,
+		Port:          port,
 		OutputPath:    outputPath,
 		YoutubedlPath: youtubedlBinPath,
 		YoutubedlArgs: youtubedlArgs,
