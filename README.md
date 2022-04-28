@@ -21,7 +21,7 @@ env GOOS=target-OS GOARCH=target-architecture go build .
 
 ## youtube playlist watching
 
-One method of triggering `ytdlwatch` to download videos is by watching a
+One method of triggering ytdlwatch to download videos is by watching a
 playlist for new videos on YouTube.
 
 ### setup
@@ -42,7 +42,7 @@ playlist for new videos on YouTube.
    Could the personal "Watch later" playlist be used? Unfortunately not, since
    it's not available through the official API.
 
-4. Run `ytdlwatch` with the environment variables listed below set up.
+4. Run ytdlwatch with the environment variables listed below set up.
 
 See also the example systemd service:
 [ytdlwatch.service.example][example-systemd-service]
