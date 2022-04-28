@@ -46,7 +46,7 @@ func main() {
 			log.Fatal().Msg("expected YOUTUBE_API_KEY environment variable to be set with YOUTUBE_PLAYLIST_ID")
 		}
 	} else {
-		log.Fatal().Msg("youtube playlist not configured")
+		log.Info().Msg("youtube playlist not configured")
 	}
 
 	if config.PlexApiToken != "" &&
