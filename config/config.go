@@ -49,6 +49,7 @@ func GetConfig() Config {
 	var youtubedlArgs []string
 	if youtubedlArgsRaw == "" {
 		youtubedlArgs = []string{
+			"--no-progress",
 			"--newline",
 			"--output", "%(title)s.%(ext)s",
 			"--embed-metadata",
