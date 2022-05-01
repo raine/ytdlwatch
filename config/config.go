@@ -54,7 +54,8 @@ func GetConfig() Config {
 		youtubedlArgs = []string{
 			"--no-progress",
 			"--newline",
-			"--output", "%(title)s.%(ext)s",
+			"--restrict-filenames",
+			"--output", "%(title)s_[%(id)s].%(ext)s",
 			"--embed-metadata",
 			"--embed-subs",
 			"--sub-lang", "en",
